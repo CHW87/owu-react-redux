@@ -1,11 +1,12 @@
 import {
-   ON_USERS_LOADED,
-    ON_ADD_TO_BAD
+    ON_USERS_LOADED,
+    ON_ADD_TO_BAD,
+    ON_REMOVE_FROM_BAD
 } from '../action-types'
 
 const initialState = {
-    users :[],
-    bad_Employees:[]
+    users: [],
+    badEmployees: []
 }
 
 const reducer = (state = initialState, action) => {
@@ -19,10 +20,17 @@ const reducer = (state = initialState, action) => {
         case ON_ADD_TO_BAD: {
             return {
                 ...state,
-                bad_Employees: [...state.bad_Employees,action.payload]
+                badEmployees: [...state.badEmployees, action.payload]
             }
         }
-     
+        case ON_REMOVE_FROM_BAD: {
+            return {
+                ...state,
+                badEmployees: state.badEmployees.filter(el => el !== action.payload)
+
+            }
+        }
+
         default :
             return state
     }

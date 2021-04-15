@@ -9,6 +9,7 @@ import {
     RESET_TWO,
     ON_USERS_LOADED,
     ON_ADD_TO_BAD,
+    ON_REMOVE_FROM_BAD,
 } from '../action-types'
 
 const incAction = () => ({type: INC})
@@ -23,6 +24,7 @@ const resetAction_two = () => ({type: RESET_TWO})
 
 const onUserLoaded= (payload) => ({type: ON_USERS_LOADED, payload})
 const onAddToBad= (payload) => ({type: ON_ADD_TO_BAD, payload})
+const onRemoveFromBad= (payload) => ({type: ON_REMOVE_FROM_BAD, payload})
 
 export {
     incAction,
@@ -34,5 +36,6 @@ export {
     decAction_two,
     resetAction_two,
     onUserLoaded,
-    onAddToBad
+    onAddToBad,
+    onRemoveFromBad
 } 

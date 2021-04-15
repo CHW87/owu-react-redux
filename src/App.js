@@ -11,7 +11,8 @@ import {
     decAction_two,
     resetAction_two,
     onUserLoaded,
-    onAddToBad
+    onAddToBad,
+    onRemoveFromBad
 } from './redux/action-creators'
 
 const PhotosList = () => {
@@ -42,7 +43,14 @@ const PhotosList = () => {
                     style={{
                         filter: badEmployees.includes(el.id) ? 'blur(3px)' : ''
                     }}
-                    onClick={() => dispatch (onAddToBad(el.id))} 
+                    onClick={() => {
+                    const alreadyInList = badEmployees.includes(el.id)
+                    const answer = !alreadyInList && window.confirm('точно кікнути людину?')
+                    if  (answer) {
+                        return dispatch(onAddToBad((el.id)))
+                    }    
+                        alreadyInList && dispatch (onRemoveFromBad(el.id)) 
+                    }}
                     key={el.id} 
                     src={el.picture} 
                     alt={el.firstName}/>
