@@ -8,6 +8,10 @@ const INC_CUSTOM_TWO = 'INC_CUSTOM_TWO'
 const DEC_TWO = 'DEC_TWO'
 const RESET_TWO = 'RESET_TWO'
 
+const ON_USERS_LOADED = 'ON_USERS_LOADED'
+const ON_ADD_TO_BAD = 'ON_ADD_TO_BAD'
+
+
 export {
     INC,
     INC_CUSTOM,
@@ -17,4 +21,6 @@ export {
     INC_CUSTOM_TWO,
     DEC_TWO,
     RESET_TWO,
+    ON_USERS_LOADED,
+    ON_ADD_TO_BAD
 }

@@ -7,6 +7,8 @@ import {
     INC_CUSTOM_TWO,
     DEC_TWO,
     RESET_TWO,
+    ON_USERS_LOADED,
+    ON_ADD_TO_BAD,
 } from '../action-types'
 
 const incAction = () => ({type: INC})
@@ -19,6 +21,9 @@ const incCustomAction_two = (payload) => ({type: INC_CUSTOM_TWO, payload})
 const decAction_two = () => ({type: DEC_TWO})
 const resetAction_two = () => ({type: RESET_TWO})
 
+const onUserLoaded= (payload) => ({type: ON_USERS_LOADED, payload})
+const onAddToBad= (payload) => ({type: ON_ADD_TO_BAD, payload})
+
 export {
     incAction,
     incCustomAction,
@@ -28,4 +33,6 @@ export {
     incCustomAction_two,
     decAction_two,
     resetAction_two,
+    onUserLoaded,
+    onAddToBad
 } 
