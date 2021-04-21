@@ -1,64 +1,97 @@
-import React from "react";
+import React,{useEffect,useMemo} from "react";
 import './App.css';
 import {useSelector, useDispatch} from "react-redux";
 import {
-    incAction,
-    incCustomAction,
-    decAction,
-    resetAction,
-    incAction_two ,
-    incCustomAction_two,
-    decAction_two,
-    resetAction_two,
-    onUserLoaded,
-    onAddToBad,
-    onRemoveFromBad
-} from './redux/action-creators'
+    // startProductsLoading,
+    // endProductsLoading,
+    // setProducts, 
+    loadProducts,
+} from './redux/action-creators/products_action_creators'
+import { toggleItemInCart} from './redux/action-creators/cart_action_creators'
+import { toggleItemInWishlist} from './redux/action-creators/wishlist_action_creators'
 
-const PhotosList = () => {
-    const dispatch = useDispatch();
-    const users = useSelector(({userReducer: {users}}) => users)
-    const badEmployees = useSelector(({userReducer: {badEmployees}}) => badEmployees)
-    const fetchPhotos = async () => {
-        const response = await fetch('https://dummyapi.io/data/api/user?limit=10', {
-            headers: {
-                'app-id': 'lTE5abbDxdjGplutvTuc'
-            }
-        })
-        const json = await response.json();
-        dispatch(onUserLoaded(json.data))
+const Header = () => {
+    const {products, isLoading} = useSelector(store => store.products);
+    const {productsInCart} = useSelector(store => store.cart);
+    const {productsInWishlist} = useSelector(store => store.wishlist);
+    
+    const calculatedCartSum = useMemo(() => {
+        return products
+            .filter(el => productsInCart.includes(el.id))
+            .reduce((acc,el)=> acc+=el.price,0)
+    },[
+        products,productsInCart
+    ]);
+    
+    const calculatedWishlistSum = useMemo(() => {
+        return products
+            .filter(el => productsInWishlist.includes(el.id))
+            .reduce((acc,el)=> acc+=el.price,0)
+    },[
+        products,productsInWishlist
+    ]);
+    
+    return(
+        <header>
+            <h2>Header</h2>
+            <div className='counters'>
+                <span>
+                    wishlist:{productsInWishlist.length} ($ {calculatedWishlistSum}) 
+                </span>
+                
+                
+                <span>
+                    cart: {productsInCart.length} ($ {calculatedCartSum})
+                </span>
+            </div>
+        </header>
+    )
+}
 
-    }
-    React.useEffect(() => {
-        if (!users.length) {
-            fetchPhotos()
-        }
-
-    }, [])
+const Products = () => {
+    const {products, isLoading} = useSelector(store => store.products);
+    const {productsInCart} = useSelector(store => store.cart);
+    const {productsInWishlist} = useSelector(store => store.wishlist);
+    console.log({products, isLoading});
+    const dispatch = useDispatch()
+    
+    React.useEffect(()=>{
+        dispatch(loadProducts());
+    },[])
     return (
-
-        <div>
-            {users.map(el => (
-                <img 
-                    style={{
-                        filter: badEmployees.includes(el.id) ? 'blur(3px)' : ''
-                    }}
-                    onClick={() => {
-                    const alreadyInList = badEmployees.includes(el.id)
-                    const answer = !alreadyInList && window.confirm('точно кікнути людину?')
-                    if  (answer) {
-                        return dispatch(onAddToBad((el.id)))
-                    }    
-                        alreadyInList && dispatch (onRemoveFromBad(el.id)) 
-                    }}
-                    key={el.id} 
-                    src={el.picture} 
-                    alt={el.firstName}/>
-            ))
-            }
+        <div className='product-wrapper'>
+            {isLoading &&(
+            <h1 style={{color:'red'}}>LOADING</h1>
+                )}
+            {!isLoading && !!products.length && products.map (el => (
+                <div key = {el.id} className='product-item'>
+                    <h3>{el.title}</h3>
+                    <h4>{el.price}</h4>
+                    <h4>{el.description}</h4>
+                    <button  
+                        style = {{
+                            backgroundColor: productsInWishlist.includes(el.id) ? 'red' : ''
+                        }}
+                        onClick={()=>dispatch(toggleItemInWishlist(el.id))}
+                    >
+                        {productsInWishlist.includes(el.id) ?'remove from wishlist': 'add to wishlist'}
+                    </button>
+                    <button 
+                        style = {{
+                            backgroundColor: productsInCart.includes(el.id) ? 'red' : ''
+                        }}
+                        onClick={()=>dispatch(toggleItemInCart(el.id))}
+                    >
+                        {productsInCart.includes(el.id) ?'remove from cart': 'add to cart'}
+                    </button>
+                    <img style ={{width: '100%'}} src={el.image} alt=''/>
+                    <hr/>
+                </div>
+            ))}    
         </div>
     )
 }
+
 
 function App() {
     const counter1 = useSelector(({counter1: {counter}}) => {
@@ -71,17 +104,19 @@ function App() {
     const dispatch = useDispatch()
     return (
         <div className="App">
-            {!!(counter1 % 2) && <PhotosList/>}
-            <h1>{counter1}-1</h1>
-            <button onClick={() => dispatch(incCustomAction(102))}>inc custom</button>
-            <button onClick={() => dispatch(incAction())}>inc</button>
-            <button onClick={() => dispatch(decAction())}>dec</button>
-            <button onClick={() => dispatch(resetAction())}>reset</button>
-            <h1>{counter2}-2</h1>
-            <button onClick={() => dispatch(incCustomAction_two(10))}>inc custom</button>
-            <button onClick={() => dispatch(incAction_two())}>inc</button>
-            <button onClick={() => dispatch(decAction_two())}>dec</button>
-            <button onClick={() => dispatch(resetAction_two())}>reset</button>
+            <Header/>
+            <Products/>
+            {/*{!!(counter1 % 2) && <PhotosList/>}*/}
+            {/*<h1>{counter1}-1</h1>*/}
+            {/*<button onClick={() => dispatch(incCustomAction(102))}>inc custom</button>*/}
+            {/*<button onClick={() => dispatch(incAction())}>inc</button>*/}
+            {/*<button onClick={() => dispatch(decAction())}>dec</button>*/}
+            {/*<button onClick={() => dispatch(resetAction())}>reset</button>*/}
+            {/*<h1>{counter2}-2</h1>*/}
+            {/*<button onClick={() => dispatch(incCustomAction_two(10))}>inc custom</button>*/}
+            {/*<button onClick={() => dispatch(incAction_two())}>inc</button>*/}
+            {/*<button onClick={() => dispatch(decAction_two())}>dec</button>*/}
+            {/*<button onClick={() => dispatch(resetAction_two())}>reset</button>*/}
         </div>
     );
 }

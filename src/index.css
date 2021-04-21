@@ -11,3 +11,25 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  background: rgba(12,27,12,0.945);
+  color: white
+}
+
+.header span {
+  margin-right: 10px;
+}
+
+.product-item {
+  width: 30%;
+  margin: 20px
+}
+.product-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
