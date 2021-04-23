@@ -3,7 +3,7 @@ import {
     END_PRODUCTS_LOADING,
     SET_PRODUCTS
     ,
-} from "../action-types";
+} from "../action-types/products_types";
 
 const initialState = {
     products: [],

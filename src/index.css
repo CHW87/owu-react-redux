@@ -27,7 +27,7 @@ header {
 
 .product-item {
   width: 30%;
-  margin: 20px
+  margin: 20px;
 }
 .product-wrapper {
   display: flex;
